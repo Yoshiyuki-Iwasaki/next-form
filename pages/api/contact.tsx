@@ -3,8 +3,24 @@ import nodemailer from "nodemailer";
 import { getMaxListeners } from "process";
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
-  const { name, mail, content, token } = req.body;
-  console.log("name", name, "mail", mail, "content", content, "token", token);
+  const { firstName, lastName, Email, mobileNumber, Title, Developer, token } =
+    req.body;
+  console.log(
+    "firstName",
+    firstName,
+    "lastName",
+    lastName,
+    "Email",
+    Email,
+    "mobileNumber",
+    mobileNumber,
+    "Title",
+    Title,
+    "Developer",
+    Developer,
+    "token",
+    token
+  );
 
   const human = await validateHuman(token);
   if (!human) {
@@ -22,17 +38,20 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
       pass: process.env.MAIL_PASSWORD,
     },
   });
-  const output_subject = `Contact form submission from ${name}`;
+  const output_subject = `Contact form submission from ${firstName}`;
   const output_html = `<p>メールが送信されました。ご回答までお待ちください。</p>
-      <p><strong>Name: </strong>${name}</p>
-      <p><strong>Mail: </strong>${mail}</p>
-      <p><strong>Content: </strong>${content}</p>
+      <p><strong>firstName: </strong>${firstName}</p>
+      <p><strong>lastName: </strong>${lastName}</p>
+      <p><strong>Email: </strong>${Email}</p>
+      <p><strong>mobileNumber: </strong>${mobileNumber}</p>
+      <p><strong>Title: </strong>${Title}</p>
+      <p><strong>Developer: </strong>${Developer}</p>
   `;
 
   try {
     const emailRes = await transporter.sendMail({
-      from: mail,
-      to: `${mail},armada3524@gmail.com`,
+      from: Email,
+      to: `${Email},armada3524@gmail.com`,
       subject: output_subject,
       html: output_html,
     });

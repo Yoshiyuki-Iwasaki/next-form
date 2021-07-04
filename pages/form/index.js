@@ -4,7 +4,6 @@ import styles from "../../styles/Home.module.css";
 import { useForm } from "react-hook-form";
 import fetch from "node-fetch";
 import ReCAPTCHA from "react-google-recaptcha";
-import axios from "axios";
 import { useRef } from "react";
 
 export default function form() {
@@ -24,9 +23,12 @@ export default function form() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        name: formData.name,
-        mail: formData.mail,
-        content: formData.content,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        Email: formData.Email,
+        mobileNumber: formData.mobileNumber,
+        Title: formData.Title,
+        Developer: formData.Developer,
         token,
       }),
     });
@@ -51,48 +53,47 @@ export default function form() {
 
       <main className={styles.main}>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <label htmlFor="name">name</label>
           <input
-            id="name"
-            aria-invalid={errors.name ? "true" : "false"}
-            {...register("name", { required: true, maxLength: 30 })}
+            type="text"
+            placeholder="First name"
+            {...register("firstName", { required: true, maxLength: 80 })}
           />
-          {/* use role="alert" to announce the error message */}
-          {errors.name && errors.name.type === "required" && (
-            <span role="alert">This is required</span>
-          )}
-          {errors.name && errors.name.type === "maxLength" && (
-            <span role="alert">Max length exceeded</span>
-          )}
-
-          <label htmlFor="mail">mail</label>
           <input
-            id="mail"
-            aria-invalid={errors.name ? "true" : "false"}
-            {...register("mail", { required: true, maxLength: 30 })}
+            type="text"
+            placeholder="Last name"
+            {...register("lastName", { required: true, maxLength: 100 })}
           />
-          {/* use role="alert" to announce the error message */}
-          {errors.name && errors.name.type === "required" && (
-            <span role="alert">This is required</span>
-          )}
-          {errors.name && errors.name.type === "maxLength" && (
-            <span role="alert">Max length exceeded</span>
-          )}
-
-          <label htmlFor="content">content</label>
           <input
-            id="content"
-            aria-invalid={errors.name ? "true" : "false"}
-            {...register("content", { required: true, maxLength: 30 })}
+            type="text"
+            placeholder="Email"
+            {...register("Email", { required: true, pattern: /^\S+@\S+$/i })}
           />
-          {/* use role="alert" to announce the error message */}
-          {errors.name && errors.name.type === "required" && (
-            <span role="alert">This is required</span>
-          )}
-          {errors.name && errors.name.type === "maxLength" && (
-            <span role="alert">Max length exceeded</span>
-          )}
+          <input
+            type="tel"
+            placeholder="Mobile number"
+            {...register("mobileNumber", {
+              required: true,
+              minLength: 6,
+              maxLength: 12,
+            })}
+          />
+          <select {...register("Title", { required: true })}>
+            <option value="Mr">Mr</option>
+            <option value="Mrs">Mrs</option>
+            <option value="Miss">Miss</option>
+            <option value="Dr">Dr</option>
+          </select>
 
+          <input
+            {...register("Developer", { required: true })}
+            type="radio"
+            value="Yes"
+          />
+          <input
+            {...register("Developer", { required: true })}
+            type="radio"
+            value="No"
+          />
           <input type="submit" />
         </form>
       </main>
